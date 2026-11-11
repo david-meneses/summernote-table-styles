@@ -1,4 +1,7 @@
 /* https://github.com/tylerecouture/summernote-lists  */
+/* https://github.com/tylerecouture/summernote-table-styles */
+/* https://github.com/david-meneses/summernote-table-styles */
+
 
 (function (factory) {
   /* global define */
@@ -25,8 +28,8 @@
   $.extend($.summernote.options, {
     tableStyles: {
       // Must keep the same order as in lang.tableStyles.styles*
-      stylesExclusive: ["", "table-bordered"],
-      stylesInclusive: ["table-striped", "table-condensed", "table-hover"]
+      stylesExclusive: ["border border-gray-300 [&_th]:border [&_th]:border-gray-300 [&_td]:border [&_td]:border-gray-300", "border border-collapse [&_th]:border [&_th]:border-gray-900 [&_td]:border [&_td]:border-gray-900"],
+      stylesInclusive: ["[&_tbody_tr:nth-child(odd)]:bg-gray-100", "text-sm", "[&_tbody_tr:hover]:bg-gray-100"]
     }
   });
 
@@ -36,15 +39,13 @@
       var self = this,
         ui = $.summernote.ui,
         options = context.options,
-        lang = options.langInfo,
-        $editor = context.layoutInfo.editor,
-        $editable = context.layoutInfo.editable,
-        editable = $editable[0];
+        lang = options.langInfo;
 
       context.memo("button.tableStyles", function () {
         var button = ui.buttonGroup([
           ui.button({
             className: "dropdown-toggle",
+            container: options.container,
             contents: ui.dropdownButtonContents(
               ui.icon(options.icons.magic),
               options
@@ -54,9 +55,9 @@
               toggle: "dropdown"
             },
             callback: function ($dropdownBtn) {
-              $dropdownBtn.click(function () {
+              $dropdownBtn[0].addEventListener("click", function () {
                 self.updateTableMenuState($dropdownBtn);
-              });
+              }, true);
             }
           }),
           ui.dropdownCheck({
@@ -82,10 +83,9 @@
       });
 
       self.updateTableStyles = function (chosenItem) {
-        const rng = context.invoke("createRange", $editable);
+        const rng = context.invoke("editor.getLastRange");
         const dom = $.summernote.dom;
         if (rng.isCollapsed() && rng.isOnCell()) {
-          context.invoke("beforeCommand");
           var table = dom.ancestor(rng.commonAncestor(), dom.isTable);
           self.updateStyles(
             $(table),
@@ -97,11 +97,11 @@
 
       /* Makes sure the check marks are on the currently applied styles */
       self.updateTableMenuState = function ($dropdownButton) {
-        const rng = context.invoke("createRange", $editable);
+        const rng = context.invoke("editor.getLastRange");
         const dom = $.summernote.dom;
         if (rng.isCollapsed() && rng.isOnCell()) {
           var $table = $(dom.ancestor(rng.commonAncestor(), dom.isTable));
-          var $listItems = $dropdownButton.parent().find(".dropdown-menu a");
+          var $listItems = $dropdownButton.parent().find(".note-dropdown-menu a");
           self.updateMenuState(
             $table,
             $listItems,
@@ -115,10 +115,9 @@
 
       self.updateMenuState = function ($node, $listItems, exclusiveStyles) {
         var hasAnExclusiveStyle = false;
-        console.log($listItems)
         $listItems.each(function () {
           var cssClass = $(this).data("value");
-          if ($node.hasClass(cssClass)) {
+          if (cssClass && cssClass.split(/\s+/).every(function (name) { return $node.hasClass(name); })) {
             $(this).addClass("checked");
             if ($.inArray(cssClass, exclusiveStyles) != -1) {
               hasAnExclusiveStyle = true;
@@ -137,10 +136,23 @@
       self.updateStyles = function ($node, chosenItem, exclusiveStyles) {
         var cssClass = $(chosenItem).data("value");
         context.invoke("beforeCommand");
+
         // Exclusive class: only one can be applied one at a time
         if ($.inArray(cssClass, exclusiveStyles) != -1) {
-          $node.removeClass(exclusiveStyles.join(" "));
-          $node.addClass(cssClass);
+          // Remove all exclusive styles
+          exclusiveStyles.forEach(function (style) {
+            if (style) {
+              $node.removeClass(style);
+            }
+          });
+
+          // Remove Bootstrap table-bordered class
+          $node.removeClass("table-bordered");
+
+          // Add new exclusive style
+          if (cssClass) {
+            $node.addClass(cssClass);
+          }
         } else {
           // Inclusive classes: multiple are ok
           $node.toggleClass(cssClass);

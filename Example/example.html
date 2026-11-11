@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Summernote Lists Extension Example</title>
+    <title>Summernote Table Styles Extension Example</title>
 
     <!-- include libraries(jQuery, bootstrap) -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -14,38 +14,43 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <script src="../summernote-table-styles.js"></script>
 
 </head>
 
-<body style="padding:20px;">
-    <h3>Demo of summernote-table-styles extension:</h3>
-    <p>Summernote version 0.8.12</p>
-    <p>JQuery version 3.4.1</p>
-    <p>Bootstrap version 3.3.7</p>
-    <div id="summernote">
-        <table class="table table-bordered table-hover table-striped">
-            <tbody>
-                <tr>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                </tr>
-                <tr>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                </tr>
-                <tr>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                </tr>
-            </tbody>
-        </table>
-        <p>
-        </p><br>
-        <p></p>
+<body class="p-5">
+    <div class="max-w-4xl mx-auto">
+        <h3 class="text-2xl font-bold mb-4">Demo of summernote-table-styles extension:</h3>
+        <p class="text-gray-600 mb-1">Summernote version 0.8.12</p>
+        <p class="text-gray-600 mb-1">JQuery version 3.4.1</p>
+        <p class="text-gray-600 mb-4">Bootstrap 3.3.7 (for editor UI) + Tailwind CSS 3.x (for table styling)</p>
+        
+        <div id="summernote">
+            <table class="border border-collapse border-gray-900 [&_th]:border [&_th]:border-gray-900 [&_td]:border [&_td]:border-gray-900">
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                        <td class="border border-gray-900 p-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p></p><br>
+            <p></p>
+        </div>
     </div>
 
     <script>
